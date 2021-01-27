@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router } from './Router';
+import {Router} from './Router';
 
 /**
  * Все приложение необходимо оборачивать в контекст для корректной работы {@link withRouter} {@link useRouter}

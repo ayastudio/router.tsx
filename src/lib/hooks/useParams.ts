@@ -1,5 +1,5 @@
-import { PageParams, useLocation } from '../..';
-import { useRef } from 'react';
+import {PageParams, useLocation} from '../..';
+import {useRef} from 'react';
 
 /**
  * Возвращает {@link PageParams} текущего {@link Location}
@@ -8,7 +8,7 @@ import { useRef } from 'react';
  * @param {string} panelId id панели для которой надо получить параметры
  */
 export function useParams(panelId?: string): PageParams {
-  const location = useLocation(false, panelId);
-  const params = useRef(location.getParams());
-  return params.current;
+    const location = useLocation(false, panelId);
+    const params = useRef(location.getParams());
+    return params.current;
 }

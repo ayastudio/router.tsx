@@ -1,121 +1,121 @@
-import { Route } from './Route';
-import { State } from './State';
-import { PageParams } from './Types';
+import {Route} from './Route';
+import {State} from './State';
+import {PageParams} from './Types';
 
 export class Location {
-  route: Route;
-  state: State;
+    route: Route;
+    state: State;
 
-  constructor(route: Route, state: State) {
-    this.route = route;
-    this.state = state;
-  }
-
-  /**
-   * @ignore
-   * @param viewId
-   */
-  public getLastPanelInView(viewId: string): string | undefined {
-    const state = this.state;
-    if (state && state.panelInView[viewId]) {
-      return state.panelInView[viewId];
+    constructor(route: Route, state: State) {
+        this.route = route;
+        this.state = state;
     }
-    return undefined;
-  }
 
-  /**
-   * Массив из id панелей для передачи в атрибут history <View>
-   *
-   * ```javascript
-   * import { useLocation } from '@happysanta/router';
-   *
-   * const App = () => {
-   *    const location = useLocation();
-   *    return <View id={VIEW_MAIN}
-   *                 history={location.getViewHistory(VIEW_MAIN)}
-   *                 activePanel={location.getViewActivePanel(VIEW_MAIN)}>
-   *           <Home id={PANEL_MAIN}/>
-   *           <Persik id={PANEL_PERSIK}/>
-   *    </View>
-   * }
-   * ```
-   *
-   * @param viewId
-   */
-  public getViewHistory(viewId: string): string[] {
-    const route = this.route;
-    const state = this.state;
-    if (route.getViewId() === viewId) {
-      return state.history;
-    } else {
-      const lastPanelId = this.getViewActivePanel(viewId);
-      if (lastPanelId) {
-        return [lastPanelId];
-      }
-      return [];
+    /**
+     * @ignore
+     * @param viewId
+     */
+    public getLastPanelInView(viewId: string): string | undefined {
+        const state = this.state;
+        if (state && state.panelInView[viewId]) {
+            return state.panelInView[viewId];
+        }
+        return undefined;
     }
-  }
 
-  public getViewHistoryWithLastPanel(viewId: string): string[] {
-    const history = this.getViewHistory(viewId);
-    const lastPanel = this.getLastPanelInView(viewId);
-    if (lastPanel && !history.includes(lastPanel)) {
-      return history.concat([lastPanel]);
-    } else {
-      return history;
+    /**
+     * Массив из id панелей для передачи в атрибут history <View>
+     *
+     * ```javascript
+     * import { useLocation } from '@happysanta/router';
+     *
+     * const App = () => {
+     *    const location = useLocation();
+     *    return <View id={VIEW_MAIN}
+     *                 history={location.getViewHistory(VIEW_MAIN)}
+     *                 activePanel={location.getViewActivePanel(VIEW_MAIN)}>
+     *           <Home id={PANEL_MAIN}/>
+     *           <Persik id={PANEL_PERSIK}/>
+     *    </View>
+     * }
+     * ```
+     *
+     * @param viewId
+     */
+    public getViewHistory(viewId: string): string[] {
+        const route = this.route;
+        const state = this.state;
+        if (route.getViewId() === viewId) {
+            return state.history;
+        } else {
+            const lastPanelId = this.getViewActivePanel(viewId);
+            if (lastPanelId) {
+                return [lastPanelId];
+            }
+            return [];
+        }
     }
-  }
 
-  /**
-   * @deprecated use getViewActivePanel
-   * @ignore
-   * @param viewId
-   */
-  public getPanelIdInView(viewId: string): string | undefined {
-    return this.getViewActivePanel(viewId);
-  }
-
-  public getViewActivePanel(viewId: string): string | undefined {
-    const route = this.route;
-    if (route.getViewId() === viewId) {
-      return route.getPanelId();
-    } else {
-      return this.getLastPanelInView(viewId);
+    public getViewHistoryWithLastPanel(viewId: string): string[] {
+        const history = this.getViewHistory(viewId);
+        const lastPanel = this.getLastPanelInView(viewId);
+        if (lastPanel && !history.includes(lastPanel)) {
+            return history.concat([lastPanel]);
+        } else {
+            return history;
+        }
     }
-  }
 
-  public getPanelId() {
-    return this.route.getPanelId();
-  }
+    /**
+     * @deprecated use getViewActivePanel
+     * @ignore
+     * @param viewId
+     */
+    public getPanelIdInView(viewId: string): string | undefined {
+        return this.getViewActivePanel(viewId);
+    }
 
-  public getViewId() {
-    return this.route.getViewId();
-  }
+    public getViewActivePanel(viewId: string): string | undefined {
+        const route = this.route;
+        if (route.getViewId() === viewId) {
+            return route.getPanelId();
+        } else {
+            return this.getLastPanelInView(viewId);
+        }
+    }
 
-  public getModalId() {
-    return this.route.getModalId();
-  }
+    public getPanelId() {
+        return this.route.getPanelId();
+    }
 
-  public getPopupId() {
-    return this.route.getPopupId();
-  }
+    public getViewId() {
+        return this.route.getViewId();
+    }
 
-  public getPageId(): string {
-    return this.route.getPageId();
-  }
+    public getModalId() {
+        return this.route.getModalId();
+    }
 
-  public getParams(): PageParams {
-    return this.route.getParams();
-  }
+    public getPopupId() {
+        return this.route.getPopupId();
+    }
 
-  public hasOverlay() {
-    return this.route.hasOverlay();
-  }
+    public getPageId(): string {
+        return this.route.getPageId();
+    }
 
-  /**
-   * Если вам надо отрисовать стрелочку назад или домик то используйте эту функцию
-   */
-  public isFirstPage(): boolean {
-    return this.state.first === 1;
-  }
+    public getParams(): PageParams {
+        return this.route.getParams();
+    }
+
+    public hasOverlay() {
+        return this.route.hasOverlay();
+    }
+
+    /**
+     * Если вам надо отрисовать стрелочку назад или домик то используйте эту функцию
+     */
+    public isFirstPage(): boolean {
+        return this.state.first === 1;
+    }
 }

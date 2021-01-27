@@ -1,13 +1,15 @@
 export interface RouterConfig {
-  /**
-   * Добавить вывод логов для отладки переходов
-   */
-  enableLogging?: boolean;
-  defaultPage?: string;
-  defaultView?: string;
-  defaultPanel?: string;
-  /**
-   * всегда используйте `true` чтобы избежать путаницы с адресами vk.com/app123#product/123 и vk.com/app123#/product/123
-   */
-  noSlash?: boolean;
+    /** Тип роутинга: false - обычный роутинг, true - хэш-роутинг */
+    useHash: boolean;
+    /** Логи для отладки переходов */
+    enableLogging?: boolean;
+    defaultPage?: string;
+    defaultView?: string;
+    defaultPanel?: string;
+    /**
+     * Добавление слэша перед хэшем (для обычного роутинга всегда используйте true)
+     * vk.com/app123#product/123 и
+     * vk.com/app123#/product/123
+     */
+    noSlash?: boolean;
 }

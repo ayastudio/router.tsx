@@ -1,4 +1,4 @@
-import { useLocation } from './useLocation';
+import {useLocation} from './useLocation';
 
 /**
  * Проверка на первую страницу для ситуаций когда пользователь входит в приложение по ссылке вида
@@ -8,6 +8,6 @@ import { useLocation } from './useLocation';
  */
 
 export function useFirstPageCheck(withUpdate = false, panelId?: string): boolean {
-  const location = useLocation(withUpdate, panelId);
-  return location.isFirstPage();
+    const location = useLocation(withUpdate, panelId);
+    return location.isFirstPage();
 }

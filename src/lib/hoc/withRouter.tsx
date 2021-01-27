@@ -1,24 +1,24 @@
-import React, { ComponentType } from 'react';
-import { Location, PageParams, Route, Router, State, useRouter } from '../..';
-import { getDisplayName } from '../tools';
+import React, {ComponentType} from 'react';
+import {Location, PageParams, Route, Router, State, useRouter} from '../..';
+import {getDisplayName} from '../tools';
 
 export interface RouterProps {
-  /**
-   * @deprecated
-   */
-  routeState: State;
+    /**
+     * @deprecated
+     */
+    routeState: State;
 
-  /**
-   * @deprecated
-   */
-  route: Route;
+    /**
+     * @deprecated
+     */
+    route: Route;
 
-  router: Router;
-  location: Location;
+    router: Router;
+    location: Location;
 }
 
 export interface RouterParams {
-  params: PageParams;
+    params: PageParams;
 }
 
 /**
@@ -31,7 +31,7 @@ export type SantaRouterProps = RouterProps;
  * @ignore
  */
 export function withSantaRouter<T>(Component: ComponentType<RouterProps & T>): ComponentType<T> {
-  return withRouter<T>(Component);
+    return withRouter<T>(Component);
 }
 
 /**
@@ -49,16 +49,13 @@ export function withSantaRouter<T>(Component: ComponentType<RouterProps & T>): C
  * @param withUpdate true - обновлять изменении при изменении location false - не обновлять
  */
 export function withRouter<T>(Component: ComponentType<RouterProps & T>, withUpdate = true): ComponentType<T> {
-  function WithRouter(props: T) {
-    const router = useRouter(withUpdate);
-    return <Component {...props}
-      router={router}
-      location={router.getCurrentLocation()}
-      routeState={router.getCurrentStateOrDef()}
-      route={router.getCurrentRouteOrDef()} />;
-  }
+    function WithRouter(props: T) {
+        const router = useRouter(withUpdate);
+        return <Component {...props} router={router} location={router.getCurrentLocation()}
+                          routeState={router.getCurrentStateOrDef()} route={router.getCurrentRouteOrDef()}/>;
+    }
 
-  WithRouter.displayName = `WithRouter(${getDisplayName(Component)})`;
-  return WithRouter;
+    WithRouter.displayName = `WithRouter(${getDisplayName(Component)})`;
+    return WithRouter;
 }
 

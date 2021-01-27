@@ -11,44 +11,44 @@ const cacheLimit = 10000;
 let cacheCount = 0;
 
 function parsePath(pageId: string): [ptr.PathFunction, ptr.Token[]] {
-  const cached = cache.get(pageId);
-  if (cached) {
-    return cached;
-  }
-  const tokens = ptr.parse(pageId);
-  const generator = ptr.tokensToFunction(tokens);
+    const cached = cache.get(pageId);
+    if (cached) {
+        return cached;
+    }
+    const tokens = ptr.parse(pageId);
+    const generator = ptr.tokensToFunction(tokens);
 
-  if (cacheCount < cacheLimit) {
-    cache.set(pageId, [generator, tokens]);
-    cacheCount++;
-  }
-  return [generator, tokens];
+    if (cacheCount < cacheLimit) {
+        cache.set(pageId, [generator, tokens]);
+        cacheCount++;
+    }
+    return [generator, tokens];
 }
 
 interface CachedPath {
-  regexp: RegExp;
-  keys: ptr.Token[];
+    regexp: RegExp;
+    keys: ptr.Token[];
 }
 
 const convertCache = new Map<string, CachedPath>();
 
 function convertPath(path: string, options?: ptr.TokensToRegexpOptions & ptr.ParseOptions): CachedPath {
-  const cacheKey = `${options?.end ? '1' : '0'}${options?.strict}${options?.sensitive}${path}`;
-  const pathCache = convertCache.get(cacheKey);
+    const cacheKey = `${options?.end ? '1' : '0'}${options?.strict}${options?.sensitive}${path}`;
+    const pathCache = convertCache.get(cacheKey);
 
-  if (pathCache) {
-    return pathCache;
-  }
+    if (pathCache) {
+        return pathCache;
+    }
 
-  const keys: ptr.Key[] = [];
-  const regexp = ptr.pathToRegexp(path, keys);
-  const result = { regexp, keys };
+    const keys: ptr.Key[] = [];
+    const regexp = ptr.pathToRegexp(path, keys);
+    const result = {regexp, keys};
 
-  if (cacheCount < cacheLimit) {
-    convertCache.set(cacheKey, result);
-    cacheCount++;
-  }
-  return result;
+    if (cacheCount < cacheLimit) {
+        convertCache.set(cacheKey, result);
+        cacheCount++;
+    }
+    return result;
 }
 
 /**
@@ -59,31 +59,31 @@ function convertPath(path: string, options?: ptr.TokensToRegexpOptions & ptr.Par
  * @ignore
  */
 export function generatePath(pageId: string, params?: {}): string {
-  if (!params) {
-    params = {};
-  }
-  params = { ...params };
-
-  const [generatePath, tokens] = parsePath(pageId);
-  const path = generatePath(params);
-  const restParams: { [key: string]: any } = { ...params };
-  tokens.forEach((t) => {
-    if (typeof t === 'object') {
-      delete restParams[t.name.toString()];
+    if (!params) {
+        params = {};
     }
-  });
-  const result = `${path}?${qs.stringify(restParams as qs.ParsedUrlQueryInput)}`;
-  return result.replace(/\?$/gmu, '');
+    params = {...params};
+
+    const [generatePath, tokens] = parsePath(pageId);
+    const path = generatePath(params);
+    const restParams: { [key: string]: any } = {...params};
+    tokens.forEach((t) => {
+        if (typeof t === 'object') {
+            delete restParams[t.name.toString()];
+        }
+    });
+    const result = `${path}?${qs.stringify(restParams as qs.ParsedUrlQueryInput)}`;
+    return result.replace(/\?$/gmu, '');
 }
 
 /**
  * @ignore
  */
 export interface MatchInterface {
-  isExact: boolean;
-  path: string;
-  url: string;
-  params: { [key: string]: string };
+    isExact: boolean;
+    path: string;
+    url: string;
+    params: { [key: string]: string };
 }
 
 /**
@@ -93,29 +93,29 @@ export interface MatchInterface {
  * @ignore
  */
 export function matchPath(location: string, pageId: string): null | MatchInterface {
-  const { regexp, keys } = convertPath(pageId, {
-    end: false,
-    strict: false,
-    sensitive: false,
-  });
-  let match = regexp.exec(location);
+    const {regexp, keys} = convertPath(pageId, {
+        end: false,
+        strict: false,
+        sensitive: false,
+    });
+    let match = regexp.exec(location);
 
-  if (!match) {
-    return null;
-  }
+    if (!match) {
+        return null;
+    }
 
-  const [url, ...values] = match;
-  const isExact = location === url;
+    const [url, ...values] = match;
+    const isExact = location === url;
 
-  return {
-    path: pageId, // the path used to match
-    url: pageId === '/' && url === '' ? '/' : url, // the matched portion of the URL
-    isExact, // whether or not we matched exactly
-    params: keys.reduce<{ [key: string]: string }>((memo, key, index) => {
-      if (typeof key === 'object') {
-        memo[key.name] = values[index];
-      }
-      return memo;
-    }, {}),
-  };
+    return {
+        path: pageId, // the path used to match
+        url: pageId === '/' && url === '' ? '/' : url, // the matched portion of the URL
+        isExact, // whether or not we matched exactly
+        params: keys.reduce<{ [key: string]: string }>((memo, key, index) => {
+            if (typeof key === 'object') {
+                memo[key.name] = values[index];
+            }
+            return memo;
+        }, {}),
+    };
 }
