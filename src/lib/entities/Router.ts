@@ -41,7 +41,7 @@ export class Router extends EventEmitter<{
     private startHistoryOffset = 0;
     private started = false;
     private readonly infinityPanelCacheInstance: Map<string, string[]> = new Map<string, string[]>();
-    private useHash: boolean;
+    private useHash: boolean = false;
 
     /**
      *
