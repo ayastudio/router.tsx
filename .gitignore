@@ -102,3 +102,11 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Intellij
+.idea/
+
+docs/
+yarn.lock
+package-lock.json
+.editorconfig
