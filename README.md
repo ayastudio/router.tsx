@@ -1,17 +1,24 @@
-# 📦 router.tsx
-
-## ⚓ React router on TypeScript
-
-Drop-in advanced replacement for the basic React router.
-
 <div align="center">
-
-[![npm version](https://badge.fury.io/js/router.tsx.svg)](https://badge.fury.io/js/router.tsx)
-![LICENSE](https://img.shields.io/npm/l/router.tsx?color=blue)
-[![Semantic Release enabled](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+  <h1>📦 router.tsx</h1>
+  <h2>⚓ Advanced React router built on TypeScript</h2>
+  <p>Drop-in versatile replacement package for the basic React router.</p>
+  <a target="_blank" href="https://badge.fury.io/js/router.tsx">
+    <img
+      src="https://badge.fury.io/js/router.tsx.svg"
+      alt="npm package version of router.tsx, drop-in versatile replacement for the basic React router" />
+  </a>
+  <a href="https://github.com/ayastudio/router.tsx#license">
+    <img
+      src="https://img.shields.io/npm/l/router.tsx?color=blue"
+      alt="LICENSE for the router.tsx, drop-in versatile replacement for the basic React router" />
+  </a>
+  <a target="_blank" href="https://github.com/semantic-release/semantic-release">
+    <img
+      src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg"
+      alt="Semantic Release enabled for the router.tsx, drop-in versatile replacement for the basic React router" />
+  </a>
 
 </div>
-
 
 ## 🍀 Supported Official Plugin
 
@@ -101,3 +108,8 @@ console.log('solution');
 ## 🍀 Acknowledgements
 
 Based on: https://github.com/HappySanta/router
+
+## 📝 LICENSE
+
+GNU Lesser General Public License v2.1 only.
+
