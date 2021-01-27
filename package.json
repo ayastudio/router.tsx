@@ -1,6 +1,6 @@
 {
   "name": "router.tsx",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "jsnext:main": "src/index.ts",
@@ -18,12 +18,18 @@
   "description": "Drop-in replacement for the React router",
   "license": "LGPL-2.1-only",
   "keywords": [
-    "react", "reactjs",
-    "typescript", "ts",
-    "npm", "tsx",
-    "npmjs", "tsc",
-    "nodejs", "node",
-    "router", "react router"
+    "react",
+    "reactjs",
+    "typescript",
+    "ts",
+    "npm",
+    "tsx",
+    "npmjs",
+    "tsc",
+    "nodejs",
+    "node",
+    "router",
+    "react router"
   ],
   "homepage": "https://github.com/ayastudio/router.tsx",
   "bugs": "https://github.com/ayastudio/router.tsx/issues",
