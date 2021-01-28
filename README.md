@@ -1,6 +1,6 @@
 <div align="center">
   <h1>📦 router.tsx</h1>
-  <h2>⚓ Advanced React router built on TypeScript</h2>
+  <h2 style="border-bottom: none">⚓ Advanced React router built on TypeScript</h2>
   <p>Drop-in versatile replacement package for the basic React router.</p>
   <a target="_blank" href="https://badge.fury.io/js/router.tsx">
     <img
@@ -19,8 +19,6 @@
   </a>
 
 </div>
-
-## 🍀 Supported Official Plugin
 
 ## 🤟 Getting Started
 
