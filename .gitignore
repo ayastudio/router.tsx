@@ -110,3 +110,4 @@ yarn.lock
 package-lock.json
 .editorconfig
 docs/
+.npmrc

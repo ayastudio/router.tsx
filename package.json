@@ -6,7 +6,7 @@
   "jsnext:main": "src/index.ts",
   "scripts": {
     "build": "tsc && ./node_modules/.bin/babel src --out-dir dist --extensions '.ts,.tsx'",
-    "win-build": "tsc && babel src --out-dir dist --extensions '.ts,.tsx' && npm version patch && git push",
+    "win-build": "tsc && babel src --out-dir dist --extensions '.ts,.tsx' && npm version patch && git push && npm publish",
     "test": "jest",
     "lint": "eslint --fix --ext .ts,.tsx src",
     "lint-check": "eslint --ext .ts,.tsx src",
