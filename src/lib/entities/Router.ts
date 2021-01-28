@@ -115,12 +115,13 @@ export class Router extends EventEmitter<{
         }
 
         if (!this.useHash) {
-            let currentRoute = this.useHash
+            let currentLocation = this.useHash
                 ? window.location.hash
                 : window.location.pathname + window.location.search;
 
-            if (currentRoute != '/' && window.history.length <= 2) {
-                window.history.pushState('', '', (this.useHash ? '#' : '') + '/');
+            if (currentLocation != '/' && window.history.length <= 2) {
+                let currentRoute = MyRoute.fromLocation(this.routes, this.defaultPage, this.alwaysStartWithSlash);
+                this.push(state, currentRoute);
                 this.push(state, nextRoute);
 
             } else {
