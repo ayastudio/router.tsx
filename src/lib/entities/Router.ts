@@ -108,6 +108,7 @@ export class Router extends EventEmitter<{
         let nextRoute = this.createRouteFromLocationWithReplace();
         const state = stateFromLocation(this.history.getCurrentIndex());
         state.first = 1;
+
         if (state.blank === 1) {
             enterEvent = [nextRoute, this.history.getCurrentRoute()];
             state.history = [nextRoute.getPanelId()];
@@ -117,11 +118,14 @@ export class Router extends EventEmitter<{
             ? window.location.hash
             : window.location.pathname + window.location.search;
 
-        if (currentRoute != '/') {
+        if (currentRoute != '/' && window.history.length <= 2) {
             window.history.pushState('', '', (this.useHash ? '#' : '') + '/');
+            this.push(state, nextRoute);
+        } else {
+            this.replace(state, nextRoute);
         }
 
-        this.replace(state, nextRoute);
+
         window.removeEventListener('popstate', this.onPopState);
         window.addEventListener('popstate', this.onPopState);
         if (enterEvent) {
