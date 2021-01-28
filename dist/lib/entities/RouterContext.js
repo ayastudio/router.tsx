@@ -1,14 +1,4 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.RouterContext = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
+import React from 'react';
 /**
  * Все приложение необходимо оборачивать в контекст для корректной работы {@link withRouter} {@link useRouter}
  *
@@ -23,7 +13,5 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
  * </RouterContext.Provider>, document.getElementById('root'));
  * ```
  */
-var RouterContext = /*#__PURE__*/_react["default"].createContext(null);
-
-exports.RouterContext = RouterContext;
+export const RouterContext = React.createContext(null);
 RouterContext.displayName = 'Router';
