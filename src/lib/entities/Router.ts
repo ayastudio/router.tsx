@@ -119,10 +119,17 @@ export class Router extends EventEmitter<{
                 ? window.location.hash
                 : window.location.pathname + window.location.search;
 
-            if (currentLocation != '/' && window.history.length <= 1) {
+            if (currentLocation != '/' && window.history.length <= 2) {
                 let currentRoute = MyRoute.fromLocation(this.routes, this.defaultPage, this.alwaysStartWithSlash);
+
                 this.push(state, currentRoute);
                 this.push(state, nextRoute);
+
+                let modalName = this.getQueryParam('m');
+
+                if (modalName) {
+                    this.pushModal(modalName);
+                }
 
             } else {
                 this.replace(state, nextRoute);
@@ -143,6 +150,12 @@ export class Router extends EventEmitter<{
     stop() {
         this.started = false;
         window.removeEventListener('popstate', this.onPopState);
+    }
+
+    getQueryParam(name: string) {
+        let urlParams = new URLSearchParams(window.location.search);
+
+        return urlParams.get(name);
     }
 
     getCurrentRouteOrDef(): MyRoute {
