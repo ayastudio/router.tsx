@@ -494,7 +494,8 @@ export class Router extends EventEmitter<{
     }
 
     private createRouteFromLocationWithReplace() {
-        const location = window.location.hash;
+        const location = this.useHash ? window.location.hash : window.location.pathname;
+
         try {
             return MyRoute.fromLocation(this.routes, location, this.alwaysStartWithSlash);
         } catch (e) {
