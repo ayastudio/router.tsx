@@ -119,7 +119,7 @@ export class Router extends EventEmitter<{
                 ? window.location.hash
                 : window.location.pathname + window.location.search;
 
-            if (currentLocation != '/' && window.history.length <= 2) {
+            if (currentLocation != '/' && window.history.length <= 1) {
                 let currentRoute = MyRoute.fromLocation(this.routes, this.defaultPage, this.alwaysStartWithSlash);
                 this.push(state, currentRoute);
                 this.push(state, nextRoute);
