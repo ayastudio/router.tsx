@@ -112,6 +112,15 @@ export class Router extends EventEmitter<{
             enterEvent = [nextRoute, this.history.getCurrentRoute()];
             state.history = [nextRoute.getPanelId()];
         }
+
+        let currentRoute = this.useHash
+            ? window.location.hash
+            : window.location.pathname + window.location.search;
+
+        if (currentRoute != '/') {
+            window.history.pushState('', '', (this.useHash ? '#' : '') + '/');
+        }
+
         this.replace(state, nextRoute);
         window.removeEventListener('popstate', this.onPopState);
         window.addEventListener('popstate', this.onPopState);
