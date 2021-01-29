@@ -142,11 +142,9 @@ export class Router extends EventEmitter<{
         let currentRoute = this.createRouteFromLocationWithReplace();
         let prevRoute = this.makeMyRoute(route);
 
-        this.push(window.history.state, currentRoute);
-
-        this.back();
-
         this.replace(window.history.state, prevRoute);
+        this.push(window.history.state, currentRoute);
+        this.back();
     }
 
     replacerUnknownRoute: ReplaceUnknownRouteFn = (r) => r;
