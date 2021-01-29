@@ -122,8 +122,13 @@ export class Router extends EventEmitter<{
                 ? window.location.hash
                 : window.location.pathname + window.location.search;
 
-            if (currentLocation != this.defaultPage && window.history.length <= 2) {
-                let defaultRoute = MyRoute.fromLocation(this.routes, this.defaultPage, this.alwaysStartWithSlash, this.useHash);
+            if (currentLocation != this.defaultPage && window.history.state?.first === 1) {
+                let defaultRoute = MyRoute.fromLocation(
+                    this.routes,
+                    this.defaultPage,
+                    this.alwaysStartWithSlash,
+                    this.useHash
+                );
 
                 this.replace(state, defaultRoute);
                 this.push(state, nextRoute);
