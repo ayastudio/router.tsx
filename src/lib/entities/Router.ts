@@ -139,12 +139,19 @@ export class Router extends EventEmitter<{
             return window.history.back();
         }
 
-        let currentRoute = this.createRouteFromLocationWithReplace();
+        let currentRoute = this.makeMyRoute(this.currentLink());
+
         let prevRoute = this.makeMyRoute(route);
 
         this.replace(window.history.state, prevRoute);
         this.push(window.history.state, currentRoute);
         this.back();
+    }
+
+    currentLink() {
+        return this.useHash
+            ? window.location.hash
+            : window.location.pathname + window.location.search;
     }
 
     replacerUnknownRoute: ReplaceUnknownRouteFn = (r) => r;
@@ -557,9 +564,7 @@ export class Router extends EventEmitter<{
     }
 
     private createRouteFromLocationWithReplace() {
-        const location = this.useHash
-            ? window.location.hash
-            : window.location.pathname + window.location.search;
+        const location = this.currentLink();
 
         try {
             return this.makeMyRoute(location);
