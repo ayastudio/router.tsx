@@ -89,12 +89,36 @@ export class Router extends EventEmitter<{
         }
     }
 
-    private static back() {
-        window.history.back();
+    private back() {
+        let mayGoBack = this.checkCanBack();
+
+        mayGoBack ? window.history.back() : this.replaceToDefault();
     }
 
-    private static backTo(x: number) {
+    private backTo(x: number) {
+        if (x < 0) {
+            let mayGoBack = this.checkCanBack();
+            mayGoBack ? window.history.go(x) : this.replaceToDefault();
+
+            return;
+        }
+
         window.history.go(x);
+    }
+
+    private checkCanBack() {
+        return window.history.state.first !== 1
+    }
+
+    private replaceToDefault() {
+        let defaultRoute = MyRoute.fromLocation(
+            this.routes,
+            this.defaultPage,
+            this.alwaysStartWithSlash,
+            this.useHash
+        );
+
+        this.replace(window.history.state, defaultRoute);
     }
 
     replacerUnknownRoute: ReplaceUnknownRouteFn = (r) => r;
@@ -117,29 +141,7 @@ export class Router extends EventEmitter<{
             state.history = [nextRoute.getPanelId()];
         }
 
-        if (!this.useHash) {
-            let currentLocation = this.useHash
-                ? window.location.hash
-                : window.location.pathname + window.location.search;
-
-            if (currentLocation != this.defaultPage && window.history.state?.first === 1) {
-                let defaultRoute = MyRoute.fromLocation(
-                    this.routes,
-                    this.defaultPage,
-                    this.alwaysStartWithSlash,
-                    this.useHash
-                );
-
-                this.replace(state, defaultRoute);
-                this.push(state, nextRoute);
-
-            } else {
-                this.replace(state, nextRoute);
-            }
-
-        } else {
-            this.replace(state, nextRoute);
-        }
+        this.replace(state, nextRoute);
 
         window.removeEventListener('popstate', this.onPopState);
         window.addEventListener('popstate', this.onPopState);
@@ -237,7 +239,7 @@ export class Router extends EventEmitter<{
      */
     popPage() {
         this.log('popPage');
-        Router.back();
+        this.back();
     }
 
     /**
@@ -248,11 +250,11 @@ export class Router extends EventEmitter<{
     popPageTo(x: number | string) {
         this.log('popPageTo', x);
         if (typeof x === 'number') {
-            Router.backTo(x);
+            this.backTo(x);
         } else {
             const offset = this.history.getPageOffset(x);
             if (this.history.canJumpIntoOffset(offset)) {
-                Router.backTo(offset);
+                this.backTo(offset);
             } else {
                 throw new Error(`Unexpected offset ${offset} then try jump to page ${x}`);
             }
@@ -264,7 +266,7 @@ export class Router extends EventEmitter<{
             this.deferOnGoBack = () => {
                 this.pushPage(pageId, params);
             };
-            Router.backTo(x);
+            this.backTo(x);
         } else {
             this.pushPage(pageId, params);
         }
@@ -338,7 +340,7 @@ export class Router extends EventEmitter<{
         let currentRoute = this.getCurrentRouteOrDef();
         if (currentRoute.isModal()) {
             this.log('popPageIfModal');
-            Router.back();
+            this.back();
         }
     }
 
@@ -346,7 +348,7 @@ export class Router extends EventEmitter<{
         let currentRoute = this.getCurrentRouteOrDef();
         if (currentRoute.isPopup()) {
             this.log('popPageIfPopup');
-            Router.back();
+            this.back();
         }
     }
 
@@ -357,7 +359,7 @@ export class Router extends EventEmitter<{
         let currentRoute = this.getCurrentRouteOrDef();
         if (currentRoute.isPopup() || currentRoute.isModal()) {
             this.log('popPageIfModalOrPopup');
-            Router.back();
+            this.back();
         }
     }
 
@@ -365,7 +367,7 @@ export class Router extends EventEmitter<{
         let currentRoute = this.getCurrentRouteOrDef();
         if (currentRoute.hasOverlay()) {
             this.log('popPageIfHasOverlay');
-            Router.back();
+            this.back();
         }
     }
 
