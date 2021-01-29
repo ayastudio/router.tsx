@@ -111,14 +111,40 @@ export class Router extends EventEmitter<{
     }
 
     private replaceToDefault() {
-        let defaultRoute = MyRoute.fromLocation(
+        let defaultRoute = this.makeMyRoute(this.defaultPage);
+
+        this.replace(window.history.state, defaultRoute);
+    }
+
+    private makeMyRoute(location: string) {
+        return MyRoute.fromLocation(
             this.routes,
-            this.defaultPage,
+            location,
             this.alwaysStartWithSlash,
             this.useHash
         );
+    }
 
-        this.replace(window.history.state, defaultRoute);
+    /**
+     * Возвращает назад, если состояние не позволяет, то на указанную страницу
+     *
+     * @param route
+     */
+    backOrTo(route: string = '/') {
+        let mayGoBack = this.checkCanBack();
+
+        if (mayGoBack) {
+            return window.history.back();
+        }
+
+        let currentRoute = this.createRouteFromLocationWithReplace();
+        let prevRoute = this.makeMyRoute(route);
+
+        this.push(window.history.state, currentRoute);
+
+        this.back();
+
+        this.replace(window.history.state, prevRoute);
     }
 
     replacerUnknownRoute: ReplaceUnknownRouteFn = (r) => r;
@@ -459,7 +485,7 @@ export class Router extends EventEmitter<{
 
     private getDefaultRoute(location: string, params: PageParams) {
         try {
-            return MyRoute.fromLocation(this.routes, '/', this.alwaysStartWithSlash, this.useHash);
+            return this.makeMyRoute('/');
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 return new MyRoute(
@@ -536,7 +562,7 @@ export class Router extends EventEmitter<{
             : window.location.pathname + window.location.search;
 
         try {
-            return MyRoute.fromLocation(this.routes, location, this.alwaysStartWithSlash, this.useHash);
+            return this.makeMyRoute(location);
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 const def = this.getDefaultRoute(location, MyRoute.getParamsFromPath(location));
@@ -548,7 +574,7 @@ export class Router extends EventEmitter<{
 
     private createRouteFromLocation(location: string): MyRoute {
         try {
-            return MyRoute.fromLocation(this.routes, location, this.alwaysStartWithSlash, this.useHash);
+            return this.makeMyRoute(location);
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 return this.getDefaultRoute(location, MyRoute.getParamsFromPath(location));
