@@ -130,7 +130,9 @@ export class Router extends EventEmitter<{
      *
      * @param route
      */
-    backOrTo(route: string = '/') {
+    backOrTo(route: string) {
+        if (!route) route = this.defaultPage;
+
         let mayGoBack = this.checkCanBack();
 
         if (mayGoBack) {
