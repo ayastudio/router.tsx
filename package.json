@@ -1,5 +1,5 @@
 {
-  "name": "router.test-000",
+  "name": "router.tsx",
   "version": "0.0.19",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
