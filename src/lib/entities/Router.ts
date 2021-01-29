@@ -107,7 +107,7 @@ export class Router extends EventEmitter<{
     }
 
     private checkCanBack() {
-        return window.history.state.first !== 1
+        return this.useHash || window.history.state.first !== 1
     }
 
     private replaceToDefault() {
