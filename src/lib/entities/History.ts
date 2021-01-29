@@ -139,6 +139,10 @@ export class History {
         return 0;
     }
 
+    getStackLength() {
+        return this.stack.length
+    }
+
     getHistoryFromStartToCurrent(): Array<[Route, State]> {
         return this.stack.slice(0, this.currentIndex);
     }

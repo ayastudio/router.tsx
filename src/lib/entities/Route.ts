@@ -45,10 +45,13 @@ export class Route {
      * @param {RouteList} routeList
      * @param location "info?w=about&show=1" то, что лежит в window.location.hash
      * @param noSlash
+     * @param useHash
      */
-    static fromLocation(routeList: RouteList, location: string, noSlash = true) {
+    static fromLocation(routeList: RouteList, location: string, noSlash = true, useHash: boolean = false) {
         const params = Route.getParamsFromPath(location);
-        location = location.replace('#', '');
+
+        if (useHash) location = location.replace('#', '');
+
         if (noSlash && location.length && !location.startsWith('/')) {
             location = `/${location}`;
         }

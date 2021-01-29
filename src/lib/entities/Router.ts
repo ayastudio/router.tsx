@@ -41,7 +41,7 @@ export class Router extends EventEmitter<{
     private startHistoryOffset = 0;
     private started = false;
     private readonly infinityPanelCacheInstance: Map<string, string[]> = new Map<string, string[]>();
-    private useHash: boolean = false;
+    private readonly useHash: boolean = false;
 
     /**
      *
@@ -63,8 +63,10 @@ export class Router extends EventEmitter<{
      */
     constructor(routes: RouteList, routerConfig: RouterConfig | null = null) {
         super();
+
         this.routes = routes;
         this.history = new History();
+
         if (routerConfig) {
             if (routerConfig.enableLogging !== undefined) {
                 this.enableLogging = routerConfig.enableLogging;
@@ -101,6 +103,7 @@ export class Router extends EventEmitter<{
         if (this.started) {
             throw new Error('start method call twice! this is not allowed');
         }
+
         this.started = true;
 
         let enterEvent: [MyRoute, MyRoute | undefined] | null = null;
@@ -119,17 +122,11 @@ export class Router extends EventEmitter<{
                 ? window.location.hash
                 : window.location.pathname + window.location.search;
 
-            if (currentLocation != '/' && window.history.length <= 2) {
-                let currentRoute = MyRoute.fromLocation(this.routes, this.defaultPage, this.alwaysStartWithSlash);
+            if (currentLocation != this.defaultPage && window.history.length <= 2) {
+                let defaultRoute = MyRoute.fromLocation(this.routes, this.defaultPage, this.alwaysStartWithSlash, this.useHash);
 
-                this.push(state, currentRoute);
+                this.replace(state, defaultRoute);
                 this.push(state, nextRoute);
-
-                let modalName = this.getQueryParam('m');
-
-                if (modalName) {
-                    this.pushModal(modalName);
-                }
 
             } else {
                 this.replace(state, nextRoute);
@@ -455,7 +452,7 @@ export class Router extends EventEmitter<{
 
     private getDefaultRoute(location: string, params: PageParams) {
         try {
-            return MyRoute.fromLocation(this.routes, '/', this.alwaysStartWithSlash);
+            return MyRoute.fromLocation(this.routes, '/', this.alwaysStartWithSlash, this.useHash);
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 return new MyRoute(
@@ -532,7 +529,7 @@ export class Router extends EventEmitter<{
             : window.location.pathname + window.location.search;
 
         try {
-            return MyRoute.fromLocation(this.routes, location, this.alwaysStartWithSlash);
+            return MyRoute.fromLocation(this.routes, location, this.alwaysStartWithSlash, this.useHash);
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 const def = this.getDefaultRoute(location, MyRoute.getParamsFromPath(location));
@@ -544,7 +541,7 @@ export class Router extends EventEmitter<{
 
     private createRouteFromLocation(location: string): MyRoute {
         try {
-            return MyRoute.fromLocation(this.routes, location, this.alwaysStartWithSlash);
+            return MyRoute.fromLocation(this.routes, location, this.alwaysStartWithSlash, this.useHash);
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 return this.getDefaultRoute(location, MyRoute.getParamsFromPath(location));
