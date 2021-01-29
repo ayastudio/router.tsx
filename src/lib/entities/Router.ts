@@ -92,13 +92,13 @@ export class Router extends EventEmitter<{
     private back() {
         let mayGoBack = this.checkCanBack();
 
-        mayGoBack ? window.history.back() : this.replaceToDefault();
+        mayGoBack ? window.history.back() : this.replaceBackOrDefault();
     }
 
     private backTo(x: number) {
         if (x < 0) {
             let mayGoBack = this.checkCanBack();
-            mayGoBack ? window.history.go(x) : this.replaceToDefault();
+            mayGoBack ? window.history.go(x) : this.replaceBackOrDefault();
 
             return;
         }
@@ -110,10 +110,28 @@ export class Router extends EventEmitter<{
         return this.useHash || window.history.state.first !== 1
     }
 
-    private replaceToDefault() {
-        let defaultRoute = this.makeMyRoute(this.defaultPage);
+    /**
+     * Проверяем возможность получить информацию о предыдыщей странице,
+     * чтобы вернуться на нее, в случае отсутствия - на главную страницу приложения
+     *
+     * @private
+     */
+    private replaceBackOrDefault() {
+        let route = this.makeMyRoute(this.tryGetPrevPageOrDefault());
 
-        this.replace(window.history.state, defaultRoute);
+        this.replace(window.history.state, route);
+    }
+
+    private tryGetPrevPageOrDefault() {
+        let page = this.defaultPage;
+
+        if (this.getQueryParam(MODAL_KEY) || this.getQueryParam(POPUP_KEY)) {
+            page = window.location.pathname;
+        }
+
+        /** TODO: добавить чтение из кнопки назад, redux (page props) */
+
+        return page;
     }
 
     private makeMyRoute(location: string) {

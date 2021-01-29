@@ -7,11 +7,11 @@ import {PageParams} from './Types';
 /**
  * @ignore
  */
-export const POPUP_KEY = 'p';
+export const POPUP_KEY = 'popup';
 /**
  * @ignore
  */
-export const MODAL_KEY = 'm';
+export const MODAL_KEY = 'modal';
 
 let routeUniqueId = 1;
 
