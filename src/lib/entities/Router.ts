@@ -125,11 +125,20 @@ export class Router extends EventEmitter<{
     private tryGetPrevPageOrDefault() {
         let page = this.defaultPage;
 
-        if (this.getQueryParam(MODAL_KEY) || this.getQueryParam(POPUP_KEY)) {
-            page = window.location.pathname;
+        let location = new URLSearchParams(this.getCurrentLink());
+
+        if (location.has(MODAL_KEY) || location.has(POPUP_KEY)) {
+
+            location.delete(MODAL_KEY);
+            location.delete(POPUP_KEY);
+
+            page = decodeURIComponent(location.toString());
         }
 
-        /** TODO: добавить чтение из кнопки назад, redux (page props) */
+        /**
+         * TODO: указать в роутинге наследуемые страницы (уровни и переходы),
+         *       сделать возможность читать из redux (page props)
+         */
 
         return page;
     }
@@ -157,7 +166,7 @@ export class Router extends EventEmitter<{
             return window.history.back();
         }
 
-        let currentRoute = this.makeMyRoute(this.currentLink());
+        let currentRoute = this.makeMyRoute(this.getCurrentLink());
 
         let prevRoute = this.makeMyRoute(route);
 
@@ -166,7 +175,7 @@ export class Router extends EventEmitter<{
         this.back();
     }
 
-    currentLink() {
+    getCurrentLink() {
         return this.useHash
             ? window.location.hash
             : window.location.pathname + window.location.search;
@@ -582,7 +591,7 @@ export class Router extends EventEmitter<{
     }
 
     private createRouteFromLocationWithReplace() {
-        const location = this.currentLink();
+        const location = this.getCurrentLink();
 
         try {
             return this.makeMyRoute(location);
