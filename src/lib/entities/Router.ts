@@ -117,15 +117,9 @@ export class Router extends EventEmitter<{
      * @private
      */
     private replaceBackOrDefault() {
-        let {page, query} = this.tryGetPrevPageOrDefault();
-
-        let route = this.makeMyRoute(page);
+        let route = this.makeMyRoute(this.tryGetPrevPageOrDefault());
 
         this.replace(window.history.state, route);
-
-        if (!this.useHash) {
-            window.history.replaceState('', '', window.location.pathname + (query ? `?${query}` : ''));
-        }
     }
 
     private tryGetPrevPageOrDefault() {
@@ -148,7 +142,7 @@ export class Router extends EventEmitter<{
 
         let queryUrl = page === this.defaultPage ? '' : decodeURIComponent(query.toString());
 
-        return {page, query: queryUrl};
+        return page + (queryUrl ? `?${queryUrl}` : '');
     }
 
     private makeMyRoute(location: string) {
