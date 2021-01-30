@@ -90,14 +90,14 @@ export class Router extends EventEmitter<{
     }
 
     private back() {
-        let mayGoBack = this.checkCanBack();
+        let mayGoBack = this.checkCanGoBack();
 
         mayGoBack ? window.history.back() : this.replaceBackOrDefault();
     }
 
     private backTo(x: number) {
         if (x < 0) {
-            let mayGoBack = this.checkCanBack();
+            let mayGoBack = this.checkCanGoBack();
             mayGoBack ? window.history.go(x) : this.replaceBackOrDefault();
 
             return;
@@ -106,7 +106,7 @@ export class Router extends EventEmitter<{
         window.history.go(x);
     }
 
-    private checkCanBack() {
+    private checkCanGoBack() {
         return this.useHash || window.history.state.first !== 1
     }
 
@@ -117,30 +117,38 @@ export class Router extends EventEmitter<{
      * @private
      */
     private replaceBackOrDefault() {
-        let route = this.makeMyRoute(this.tryGetPrevPageOrDefault());
+        let {page, query} = this.tryGetPrevPageOrDefault();
+
+        let route = this.makeMyRoute(page);
 
         this.replace(window.history.state, route);
+
+        if (!this.useHash) {
+            window.history.replaceState('', '', window.location.pathname + (query ? `?${query}` : ''));
+        }
     }
 
     private tryGetPrevPageOrDefault() {
         let page = this.defaultPage;
 
-        let location = new URLSearchParams(this.getCurrentLink());
+        let query = new URLSearchParams(window.location.search);
 
-        if (location.has(MODAL_KEY) || location.has(POPUP_KEY)) {
+        if (query.has(MODAL_KEY) || query.has(POPUP_KEY)) {
 
-            location.delete(MODAL_KEY);
-            location.delete(POPUP_KEY);
+            query.delete(MODAL_KEY);
+            query.delete(POPUP_KEY);
 
-            page = decodeURIComponent(location.toString());
+            page = window.location.pathname;
         }
 
         /**
-         * TODO: указать в роутинге наследуемые страницы (уровни и переходы),
-         *       сделать возможность читать из redux (page props)
+         * TODO: • Указать в роутинге наследуемые страницы (уровни и переходы),
+         *         сделать возможность читать из redux (page props)
          */
 
-        return page;
+        let queryUrl = page === this.defaultPage ? '' : decodeURIComponent(query.toString());
+
+        return {page, query: queryUrl};
     }
 
     private makeMyRoute(location: string) {
@@ -160,7 +168,7 @@ export class Router extends EventEmitter<{
     backOrTo(route: string) {
         if (!route) route = this.defaultPage;
 
-        let mayGoBack = this.checkCanBack();
+        let mayGoBack = this.checkCanGoBack();
 
         if (mayGoBack) {
             return window.history.back();
