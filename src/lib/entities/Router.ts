@@ -127,20 +127,19 @@ export class Router extends EventEmitter<{
 
         let query = new URLSearchParams(window.location.search);
 
+        let samePage = false;
+
         if (query.has(MODAL_KEY) || query.has(POPUP_KEY)) {
 
             query.delete(MODAL_KEY);
             query.delete(POPUP_KEY);
 
             page = window.location.pathname;
+
+            samePage = true;
         }
 
-        /**
-         * TODO: • Указать в роутинге наследуемые страницы (уровни и переходы),
-         *         сделать возможность читать из redux (page props)
-         */
-
-        let queryUrl = page === this.defaultPage ? '' : decodeURIComponent(query.toString());
+        let queryUrl = !samePage ? '' : decodeURIComponent(query.toString());
 
         return page + (queryUrl ? `?${queryUrl}` : '');
     }
