@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc && ./node_modules/.bin/babel src --out-dir dist --extensions '.ts,.tsx'",
     "win-build": "tsc && babel src --out-dir dist --extensions '.ts,.tsx' && npm version patch && git push && npm publish",
+    "win-publish": "node package-scripts.js win-publish",
     "test": "jest",
     "lint": "eslint --fix --ext .ts,.tsx src",
     "lint-check": "eslint --ext .ts,.tsx src",
@@ -16,7 +17,7 @@
     "docs": "./node_modules/.bin/typedoc --externalPattern 'src/index.ts' --exclude **/*.spec.ts* --excludeExternals --excludeNotExported --out docs src/"
   },
   "author": "AYA Studio",
-  "description": "Drop-in replacement for the React router",
+  "description": "router.tsx — drop-in versatile replacement package for the basic React router. An advanced React router built on TypeScript.",
   "license": "LGPL-2.1-only",
   "keywords": [
     "es2015",
