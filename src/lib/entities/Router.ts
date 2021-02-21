@@ -1,14 +1,14 @@
-import {Page} from './Page';
-import {History, UpdateEventType} from './History';
-import {MODAL_KEY, POPUP_KEY, Route as MyRoute} from './Route';
-import {preventBlinkingBySettingScrollRestoration} from '../tools';
-import {State, stateFromLocation} from './State';
-import {EventEmitter} from 'tsee';
+import { Page } from './Page';
+import { History, UpdateEventType } from './History';
+import { MODAL_KEY, POPUP_KEY, Route as MyRoute } from './Route';
+import { preventBlinkingBySettingScrollRestoration } from '../tools';
+import { State, stateFromLocation } from './State';
+import { EventEmitter } from 'tsee';
 
-import {PAGE_MAIN, PANEL_MAIN, VIEW_MAIN} from '../const';
-import {RouterConfig} from './RouterConfig';
-import {Location} from './Location';
-import {HistoryUpdateType, PageParams} from './Types';
+import { PAGE_MAIN, PANEL_MAIN, VIEW_MAIN } from '../const';
+import { RouterConfig } from './RouterConfig';
+import { Location } from './Location';
+import { HistoryUpdateType, PageParams } from './Types';
 
 export declare type RouteList = { [key: string]: Page };
 
@@ -191,15 +191,15 @@ export class Router extends EventEmitter<{
 
         this.started = true;
 
-        let enterEvent: [MyRoute, MyRoute | undefined] | null = null;
+        let enterEvent: [ MyRoute, MyRoute | undefined ] | null = null;
         this.startHistoryOffset = window.history.length;
         let nextRoute = this.createRouteFromLocationWithReplace();
         const state = stateFromLocation(this.history.getCurrentIndex());
         state.first = 1;
 
         if (state.blank === 1) {
-            enterEvent = [nextRoute, this.history.getCurrentRoute()];
-            state.history = [nextRoute.getPanelId()];
+            enterEvent = [ nextRoute, this.history.getCurrentRoute() ];
+            state.history = [ nextRoute.getPanelId() ];
         }
 
         this.replace(state, nextRoute);
@@ -215,6 +215,10 @@ export class Router extends EventEmitter<{
     stop() {
         this.started = false;
         window.removeEventListener('popstate', this.onPopState);
+    }
+
+    getRoute() {
+        return this.history.getCurrentRoute();
     }
 
     getQueryParam(name: string) {
@@ -234,7 +238,7 @@ export class Router extends EventEmitter<{
     getCurrentStateOrDef(): State {
         const s = this.history.getCurrentState();
         if (s) {
-            return {...s};
+            return { ...s };
         }
         return stateFromLocation(this.history.getCurrentIndex());
     }
@@ -256,11 +260,11 @@ export class Router extends EventEmitter<{
         Router.checkParams(params);
         let currentRoute = this.getCurrentRouteOrDef();
         let nextRoute = MyRoute.fromPageId(this.routes, pageId, params);
-        const s = {...this.getCurrentStateOrDef()};
+        const s = { ...this.getCurrentStateOrDef() };
         if (currentRoute.getViewId() === nextRoute.getViewId()) {
-            s.history = s.history.concat([nextRoute.getPanelId()]);
+            s.history = s.history.concat([ nextRoute.getPanelId() ]);
         } else {
-            s.history = [nextRoute.getPanelId()];
+            s.history = [ nextRoute.getPanelId() ];
         }
         this.push(s, nextRoute);
     }
@@ -274,19 +278,19 @@ export class Router extends EventEmitter<{
         this.log(`replacePage ${pageId}`, params);
         let currentRoute = this.getCurrentRouteOrDef();
         let nextRoute = MyRoute.fromPageId(this.routes, pageId, params);
-        const s = {...this.getCurrentStateOrDef()};
+        const s = { ...this.getCurrentStateOrDef() };
         if (currentRoute.getViewId() === nextRoute.getViewId()) {
             s.history = s.history.concat([]);
             s.history.pop();
             s.history.push(nextRoute.getPanelId());
         } else {
-            s.history = [nextRoute.getPanelId()];
+            s.history = [ nextRoute.getPanelId() ];
         }
         this.replace(s, nextRoute);
     }
 
     pushPageAfterPreviews(prevPageId: string, pageId: string, params: PageParams = {}) {
-        this.log('pushPageAfterPreviews', [prevPageId, pageId, params]);
+        this.log('pushPageAfterPreviews', [ prevPageId, pageId, params ]);
         const offset = this.history.getPageOffset(prevPageId);
         if (this.history.canJumpIntoOffset(offset)) {
             return this.popPageToAndPush(offset, pageId, params);
@@ -345,7 +349,7 @@ export class Router extends EventEmitter<{
      * например перейдя по колокольчику или открыв вкпей
      */
     fixBrokenHistory() {
-        this.history.getHistoryFromStartToCurrent().forEach(([r, s]) => {
+        this.history.getHistoryFromStartToCurrent().forEach(([ r, s ]) => {
             window.history.pushState(s, `page=${s.index}`, (this.useHash ? '#' : '') + r.getLocation());
         });
         this.startHistoryOffset = window.history.length - this.history.getLength();
@@ -479,8 +483,8 @@ export class Router extends EventEmitter<{
     getPreviousLocation(): Location | undefined {
         const history = this.history.getHistoryItem(-1);
         if (history) {
-            const [route, state] = history;
-            return new Location(route, {...state});
+            const [ route, state ] = history;
+            return new Location(route, { ...state });
         }
         return undefined;
     }
@@ -536,15 +540,15 @@ export class Router extends EventEmitter<{
     private readonly onPopState = () => {
         let nextRoute = this.createRouteFromLocationWithReplace();
         const state = stateFromLocation(this.history.getCurrentIndex());
-        let enterEvent: [MyRoute, MyRoute | undefined] | null = null;
+        let enterEvent: [ MyRoute, MyRoute | undefined ] | null = null;
         let updateEvent: UpdateEventType | null = null;
         if (state.blank === 1) {
             // Пустое состояние бывает когда приложение восстанавливают из кеша с другим хешом
             // такое состояние помечаем как первая страница
             state.first = 1;
             state.index = this.history.getCurrentIndex();
-            state.history = [nextRoute.getPanelId()];
-            enterEvent = [nextRoute, this.history.getCurrentRoute()];
+            state.history = [ nextRoute.getPanelId() ];
+            enterEvent = [ nextRoute, this.history.getCurrentRoute() ];
             updateEvent = this.history.push(nextRoute, state);
             window.history.replaceState(state, `page=${state.index}`, (this.useHash ? '#' : '') + nextRoute.getLocation());
         } else {
@@ -558,7 +562,7 @@ export class Router extends EventEmitter<{
             return;
         }
 
-        this.log('onPopState', [nextRoute, this.history.getCurrentRoute(), state]);
+        this.log('onPopState', [ nextRoute, this.history.getCurrentRoute(), state ]);
 
         if (enterEvent) {
             this.emit('enter', ...enterEvent);
@@ -636,8 +640,8 @@ export class Router extends EventEmitter<{
         const oldList = this.infinityPanelCacheInstance.get(viewId) || [];
         const mergedList = Array.from(new Set(list.concat(oldList)));
         mergedList.sort((a, b) => {
-            const [, xa] = a.split('..');
-            const [, xb] = b.split('..');
+            const [ , xa ] = a.split('..');
+            const [ , xb ] = b.split('..');
             return Number(xa) - Number(xb);
         });
         this.infinityPanelCacheInstance.set(viewId, mergedList);
