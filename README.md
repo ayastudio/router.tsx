@@ -27,11 +27,12 @@
 
 ## ℹ️ About router.tsx
 
-So, we know that there's react-router, router5 and others. But we wanted to make a simple, but
-multifunctional router, which would be useful in the more specific and tough-to-manage cases. This router is specially tinkered for VKUI and it's components.
+So, we know that there's react-router, router5 and others.
+But we wanted to make a simple, but multifunctional router, which would be useful in the more specific and tough-to-manage cases.
+This router is specially tinkered for VKUI and it's components.
 
 By the way, batteries (TypeScript) included.
-But you can still you good ol' ES6 JavaScript, which can be compiled to the *dirs/* folder
+But you can still use good ol' ES6 JavaScript, which can be compiled to the *dirs/* folder
 and is already presented in the [router.tsx npm package](https://www.npmjs.com/package/router.tsx).
 
 ## 🤟 Installing
