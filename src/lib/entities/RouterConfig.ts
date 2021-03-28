@@ -1,6 +1,8 @@
 export interface RouterConfig {
     /** Тип роутинга: false - обычный роутинг, true - хэш-роутинг */
     useHash: boolean;
+    /** Путь к 404 странице */
+    notFoundRoute: string;
     /** Логи для отладки переходов */
     enableLogging?: boolean;
     defaultPage?: string;

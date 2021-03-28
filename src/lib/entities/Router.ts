@@ -42,6 +42,7 @@ export class Router extends EventEmitter<{
     private started = false;
     private readonly infinityPanelCacheInstance: Map<string, string[]> = new Map<string, string[]>();
     private readonly useHash: boolean = false;
+    private readonly notFoundRoute: string = '/404';
 
     /**
      *
@@ -85,6 +86,9 @@ export class Router extends EventEmitter<{
             }
             if (routerConfig.useHash !== undefined) {
                 this.useHash = routerConfig.useHash;
+            }
+            if (routerConfig.notFoundRoute !== undefined) {
+                this.notFoundRoute = routerConfig.notFoundRoute;
             }
         }
     }
@@ -522,9 +526,9 @@ export class Router extends EventEmitter<{
         }
     }
 
-    private getDefaultRoute(location: string, params: PageParams) {
+    private getNotFoundRoute(location: string, params: PageParams) {
         try {
-            return this.makeMyRoute('/');
+            return this.makeMyRoute(this.notFoundRoute);
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 return new MyRoute(
@@ -602,7 +606,7 @@ export class Router extends EventEmitter<{
             return this.makeMyRoute(location);
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
-                const def = this.getDefaultRoute(location, MyRoute.getParamsFromPath(location));
+                const def = this.getNotFoundRoute(location, MyRoute.getParamsFromPath(location));
                 return this.replacerUnknownRoute(def, this.history.getCurrentRoute());
             }
             throw e;
@@ -614,7 +618,7 @@ export class Router extends EventEmitter<{
             return this.makeMyRoute(location);
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
-                return this.getDefaultRoute(location, MyRoute.getParamsFromPath(location));
+                return this.getNotFoundRoute(location, MyRoute.getParamsFromPath(location));
             }
             throw e;
         }
