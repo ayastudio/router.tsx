@@ -258,7 +258,9 @@ export class Router extends EventEmitter<{
     }
 
     compile(pageId: string, params: PageParams = {}) {
-        return compile(pageId, params);
+        const generator = compile(pageId, { encode: encodeURIComponent });
+
+        return generator(params);
     }
 
     /**
