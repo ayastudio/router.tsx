@@ -10,6 +10,9 @@ import { RouterConfig } from './RouterConfig';
 import { Location } from './Location';
 import { HistoryUpdateType, PageParams } from './Types';
 
+import { compile } from 'path-to-regexp';
+
+
 export declare type RouteList = { [key: string]: Page };
 
 export declare type ReplaceUnknownRouteFn = (newRoute: MyRoute, oldRoute?: MyRoute) => MyRoute;
@@ -111,7 +114,7 @@ export class Router extends EventEmitter<{
     }
 
     private checkCanGoBack() {
-        return this.useHash || window.history.state.first !== 1
+        return this.useHash || window.history.state.first !== 1;
     }
 
     /**
@@ -153,7 +156,7 @@ export class Router extends EventEmitter<{
             this.routes,
             location,
             this.alwaysStartWithSlash,
-            this.useHash
+            this.useHash,
         );
     }
 
@@ -252,6 +255,10 @@ export class Router extends EventEmitter<{
             return;
         }
         console.log.apply(this, args);
+    }
+
+    compile(pageId: string, params: PageParams = {}) {
+        return compile(pageId, params);
     }
 
     /**
