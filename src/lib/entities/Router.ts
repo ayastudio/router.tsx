@@ -1,16 +1,18 @@
+import { compile } from 'path-to-regexp';
+import { EventEmitter } from 'tsee';
+
 import { Page } from './Page';
 import { History, UpdateEventType } from './History';
 import { MODAL_KEY, POPUP_KEY, Route as MyRoute } from './Route';
 import { preventBlinkingBySettingScrollRestoration } from '../tools';
 import { State, stateFromLocation } from './State';
-import { EventEmitter } from 'tsee';
 
 import { PAGE_MAIN, PANEL_MAIN, VIEW_MAIN } from '../const';
 import { RouterConfig } from './RouterConfig';
 import { Location } from './Location';
 import { HistoryUpdateType, PageParams } from './Types';
 
-import { compile } from 'path-to-regexp';
+import { matchPath } from '../workWithPathRegexp';
 
 
 export declare type RouteList = { [key: string]: Page };
@@ -261,6 +263,10 @@ export class Router extends EventEmitter<{
         const generator = compile(pageId, { encode: encodeURIComponent });
 
         return generator(params);
+    }
+
+    matchPath(location: string, pageId: string) {
+        return matchPath(location, pageId);
     }
 
     /**
