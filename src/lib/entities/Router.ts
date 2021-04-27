@@ -265,7 +265,7 @@ export class Router extends EventEmitter<{
         return generator(params);
     }
 
-    matchPath(location: string, pageId: string) {
+    static matchPath(location: string, pageId: string) {
         return matchPath(location, pageId);
     }
 
