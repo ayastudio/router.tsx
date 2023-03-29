@@ -547,7 +547,7 @@ export class Router extends EventEmitter<{
             return this.makeMyRoute(
                 this.notFoundRoute + `?location=${location}&params=${qs.stringify(params)}`
             );
-        } catch (e) {
+        } catch (e: any) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 return new MyRoute(
                     new Page(this.defaultPanel, this.defaultView),
@@ -622,7 +622,7 @@ export class Router extends EventEmitter<{
 
         try {
             return this.makeMyRoute(location);
-        } catch (e) {
+        } catch (e: any) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 const def = this.getNotFoundRoute(location, MyRoute.getParamsFromPath(location));
                 return this.replacerUnknownRoute(def, this.history.getCurrentRoute());
@@ -634,7 +634,7 @@ export class Router extends EventEmitter<{
     private createRouteFromLocation(location: string): MyRoute {
         try {
             return this.makeMyRoute(location);
-        } catch (e) {
+        } catch (e: any) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 return this.getNotFoundRoute(location, MyRoute.getParamsFromPath(location));
             }
