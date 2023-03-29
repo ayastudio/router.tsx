@@ -1,3 +1,4 @@
+import * as qs from 'querystring';
 import { compile } from 'path-to-regexp';
 import { EventEmitter } from 'tsee';
 
@@ -543,7 +544,9 @@ export class Router extends EventEmitter<{
 
     private getNotFoundRoute(location: string, params: PageParams) {
         try {
-            return this.makeMyRoute(this.notFoundRoute);
+            return this.makeMyRoute(
+                this.notFoundRoute + `?location=${location}&params=${qs.stringify(params)}`
+            );
         } catch (e) {
             if (e && e.message === 'ROUTE_NOT_FOUND') {
                 return new MyRoute(
